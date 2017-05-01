@@ -1,0 +1,85 @@
+https://www.nyaa.se/
+?page=search
+&cats=1_37
+&filter=2
+&term=[horriblesubs]
+
+··················································
+
+https://www.nyaa.se/
+?page=search    search
+?page=rss       returns RSS of search
+
+?page=upload
+?page=login
+?page=signup
+?page=manual
+
+··················································
+
+https://www.nyaa.se/?page=search&cats=0_0
+&filter=0   = Show All
+&filter=1   = Filter remakes
+&filter=2   = Trusted only
+&filter=3   = A+ only
+
+··················································
+
+https://www.nyaa.se/?page=search
+&cats=0_0   = All categories
+
+&cats=1_0   = Anime
+&cats=1_11  = Anime - Raw
+&cats=1_32  = Anime - Anime Music Video
+&cats=1_37  = Anime - English-translated
+&cats=1_38  = Anime – Non-English-Translated
+
+&cats=2_0   = Literature
+&cats=2_12  = Literature - English Translated
+&cats=2_13  = Literature - Raw
+&cats=2_39  = Literature - Non-English-Translated
+
+&cats=3_0   = Audio
+&cats=3_14  = Audio - Lossless
+&cats=3_15  = Audio - Lossy
+
+&cats=4_0   = Pictures
+&cats=4_17  = Pictures - Photo
+&cats=4_18  = Pictures - Graphics
+
+&cats=5_0   = Live Action
+&cats=5_19  = Live Action - English Translated
+&cats=5_20  = Live Action - Non-English-Translated
+&cats=5_21  = Live Action - Idol/Promotional Video
+&cats=5_22  = Live Action - Raw
+
+&cats=6_0   = Software
+&cats=6_23  = Software - Application
+&cats=6_24  = Software - Games
+
+sukubei.nyaa.se
+&cats=7_0   = Art
+&cats=7_25  = Art - Anime
+&cats=7_26  = Art - Manga
+&cats=7_27  = Art - Games
+&cats=7_28  = Art - Pictures
+&cats=7_33  = Art - Doujinshi
+
+&cats=8_0   = Real Life
+&cats=8_30  = Real Life - Videos
+&cats=8_31  = Real Life - Photobooks & Pictures
+
+··················································
+
+&user=USERID    USER submissions| replace USERID with actual numerical ID
+&minage=2       in days
+&maxage=3       in days
+&minsize=5      in MiB
+&maxsize=700    in MiB
+&exclude=       User ID - hyphen/minus deliminted
+                64513 excludes HorribleSubs
+                76430 excludes Commie
+                64513-76430 excludes both
+&term=          search…
+
+··················································
