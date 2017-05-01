@@ -10,7 +10,7 @@
 
 # directories #
 ###############
-/idea/*
+/.idea/*
 /out/*
 /testing/*
 
