@@ -139,7 +139,6 @@ public class ImmutableNyaaUrl implements NyaaUrl<ImmutableNyaaUrl> {
         public ImmutableNyaaUrl build() {
             return new ImmutableNyaaUrl(this);
         }
-
     }
 
     public static NyaaUrlBuilder<ImmutableNyaaUrl> builder() {

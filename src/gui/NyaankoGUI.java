@@ -52,7 +52,6 @@ public class NyaankoGUI extends Application {
 
     private void composeNyaaSearchFormular() {
 
-
         SimpleNyaaUrl.Page page;
         SimpleNyaaUrl.Filter filter;
         SimpleNyaaUrl.NyaaCategory category;

@@ -12,13 +12,6 @@ import java.util.Iterator;
  */
 public interface NyaaUrl<T extends NyaaUrl<T>> {
 
-    /*
-    // Mandatory Static Builder Methods not possible
-    static NyaaUrlBuilder<T> builder();
-
-    static NyaaUrlBuilder<T> builder(T reference);
-    */
-
     /** Other */
 
     public default URL newInstanceOfSearch() {
@@ -27,18 +20,6 @@ public interface NyaaUrl<T extends NyaaUrl<T>> {
 
     public default URL newInstanceOfRssFeed() {
         return makeURLfromString(getRssFeed());
-    }
-
-    public static URL makeURLfromString(String url) {
-        URL endResult = null;
-
-        try {
-            endResult = new URL(url);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
-        return endResult;
     }
 
     public default String prepareURL() {
@@ -63,29 +44,17 @@ public interface NyaaUrl<T extends NyaaUrl<T>> {
         return result.toString();
     }
 
-    /*
-        private String prepareURL() {
-            StringBuilder result = new StringBuilder("https://")
-                    .append((category.isNSFW())? "sukebei" : "www")
-                    .append(".nyaa.se/")
-                    .append(page.toString())
-                    .append(filter.toString())
-                    .append(category.toString());
-            if(userID > 0) result.append("&user=").append(userID);
-            if(minSize > 0) result.append("&minage=").append(minAge);
-            if(maxAge > 0) result.append("&maxage=").append(maxAge);
-            if(minSize > 0) result.append("&minsize=").append(minSize);
-            if(maxSize > 0) result.append("&maxsize=").append(maxSize);
-            if(exclude.size() > 0) {
-                Iterator<Integer> it = exclude.iterator();
-                result.append("&exclude=").append(it.next().intValue());
-                while( it.hasNext() )
-                    result.append('-').append(it.next().intValue());
-            }
-            if(search != null && search.length() > 0) result.append("&term=").append(search);
-            return result.toString();
+    public static URL makeURLfromString(String url) {
+        URL endResult = null;
+
+        try {
+            endResult = new URL(url);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
         }
-     */
+
+        return endResult;
+    }
 
     /** Data */
 
@@ -460,29 +429,25 @@ public interface NyaaUrl<T extends NyaaUrl<T>> {
 
     }
 
+    /*
+    // Mandatory Static Builder Methods not possible
+    static NyaaUrlBuilder<T> builder();
+
+    static NyaaUrlBuilder<T> builder(T reference);
+    */
+
     /** Getter */
 
     public abstract Page getPage();
-
     public abstract Filter getFilter();
-
     public abstract NyaaCategory getCategory();
-
     public abstract int getUserID();
-
     public abstract int getMinAge();
-
     public abstract int getMaxAge();
-
     public abstract int getMinSize();
-
     public abstract int getMaxSize();
-
     public abstract HashSet<Integer> getExclude();
-
     public abstract String getSearch();
-
     public abstract String getNormalSearch();
-
     public abstract String getRssFeed();
 }

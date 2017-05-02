@@ -20,26 +20,4 @@ public interface NyaaUrlBuilder<T extends NyaaUrl<T>> {
     NyaaUrlBuilder<T> reset();
 
     T build();
-
-    /*
-    NyaaUrlBuilder defaultPage(T.Page page);
-    NyaaUrlBuilder defaultFilter(T.Filter filter);
-    NyaaUrlBuilder defaultCat(T.NyaaCategory cat);
-    NyaaUrlBuilder defaultUser(int userID);
-    NyaaUrlBuilder defaultAge(int min, int max);
-    NyaaUrlBuilder defaultSize(int min, int max);
-    NyaaUrlBuilder defaultExclude(int... userID);
-    NyaaUrlBuilder defaultSearch(String search);
-    */
-
-    /*
-    NyaaUrlBuilder page(ImmutableNyaaUrl.Page page);
-    NyaaUrlBuilder filter(ImmutableNyaaUrl.Filter filter);
-    NyaaUrlBuilder cat(ImmutableNyaaUrl.NyaaCategory cat);
-    NyaaUrlBuilder user(int userID);
-    NyaaUrlBuilder age(int min, int max);
-    NyaaUrlBuilder size(int min, int max);
-    NyaaUrlBuilder exclude(int... userID);
-    NyaaUrlBuilder search(String search);
-    */
 }
