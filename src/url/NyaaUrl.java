@@ -1,12 +1,93 @@
+package url;
+
+import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
 
 /**
  * @author edotee
  */
-public class NyaaUrl {
+public interface NyaaUrl<T extends NyaaUrl<T>> {
 
-    public final static NyaaUrlBuilder builder = new NyaaUrlBuilderImpl();
+    /*
+    // Mandatory Static Builder Methods not possible
+    static NyaaUrlBuilder<T> builder();
+
+    static NyaaUrlBuilder<T> builder(T reference);
+    */
+
+    /** Other */
+
+    public default URL newInstanceOfSearch() {
+        return makeURLfromString(getNormalSearch());
+    }
+
+    public default URL newInstanceOfRssFeed() {
+        return makeURLfromString(getRssFeed());
+    }
+
+    public static URL makeURLfromString(String url) {
+        URL endResult = null;
+
+        try {
+            endResult = new URL(url);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return endResult;
+    }
+
+    public default String prepareURL() {
+        StringBuilder result = new StringBuilder("https://")
+                .append((getCategory().isNSFW())? "sukebei" : "www")
+                .append(".nyaa.se/")
+                .append(getPage().toString())
+                .append(getFilter().toString())
+                .append(getCategory().toString());
+        if(getUserID() > 0) result.append("&user=").append(getUserID());
+        if(getMinAge() > 0) result.append("&minage=").append(getMinAge());
+        if(getMaxAge() > 0) result.append("&maxage=").append(getMaxAge());
+        if(getMinSize() > 0) result.append("&minsize=").append(getMinSize());
+        if(getMaxSize() > 0) result.append("&maxsize=").append(getMaxSize());
+        if(getExclude().size() > 0) {
+            Iterator<Integer> it = getExclude().iterator();
+            result.append("&exclude=").append(it.next().intValue());
+            while( it.hasNext() )
+                result.append('-').append(it.next().intValue());
+        }
+        if(getSearch() != null && getSearch().length() > 0) result.append("&term=").append(getSearch());
+        return result.toString();
+    }
+
+    /*
+        private String prepareURL() {
+            StringBuilder result = new StringBuilder("https://")
+                    .append((category.isNSFW())? "sukebei" : "www")
+                    .append(".nyaa.se/")
+                    .append(page.toString())
+                    .append(filter.toString())
+                    .append(category.toString());
+            if(userID > 0) result.append("&user=").append(userID);
+            if(minSize > 0) result.append("&minage=").append(minAge);
+            if(maxAge > 0) result.append("&maxage=").append(maxAge);
+            if(minSize > 0) result.append("&minsize=").append(minSize);
+            if(maxSize > 0) result.append("&maxsize=").append(maxSize);
+            if(exclude.size() > 0) {
+                Iterator<Integer> it = exclude.iterator();
+                result.append("&exclude=").append(it.next().intValue());
+                while( it.hasNext() )
+                    result.append('-').append(it.next().intValue());
+            }
+            if(search != null && search.length() > 0) result.append("&term=").append(search);
+            return result.toString();
+        }
+     */
+
+    /** Data */
 
     public enum Page {
         SEARCH("Search", "search"),
@@ -83,7 +164,25 @@ public class NyaaUrl {
     public enum Category implements NyaaCategory {
         ALL("All Categories", 0);
 
-        public static final int CATNUM = 0;
+        private final static class LazyHelper {
+            public final static ArrayList<NyaaCategory> INSTANCE = init();
+            private static synchronized ArrayList<NyaaCategory> init() {
+                //not sure if synchronized is needed
+                ArrayList<NyaaCategory> result = new ArrayList<>();
+                result.addAll( Arrays.asList( ANIME.values()) );
+                result.addAll( Arrays.asList( LITERATURE.values()) );
+                result.addAll( Arrays.asList( AUDIO.values()) );
+                result.addAll( Arrays.asList( PICTURE.values()) );
+                result.addAll( Arrays.asList( LIVEACTION.values()) );
+                result.addAll( Arrays.asList( SOFTWARE.values()) );
+                result.addAll( Arrays.asList( ART.values()) );
+                result.addAll( Arrays.asList( REALLIFE.values()) );
+                return result;
+            }
+        }
+
+        public final static int CATNUM = 0;
+
         private String name;
         private int id;
 
@@ -102,6 +201,10 @@ public class NyaaUrl {
 
         public String toString() {
             return "&cats=" + this.getID();
+        }
+
+        public static ArrayList<NyaaCategory> recursiveValues() {
+            return LazyHelper.INSTANCE;
         }
 
         public enum ANIME implements NyaaCategory {
@@ -167,7 +270,7 @@ public class NyaaUrl {
 
         public enum AUDIO implements NyaaCategory {
 
-            ALL("", 0),
+            ALL("Audio", 0),
             LOSSLESS(ALL.getName() + " - Lossless", 14),
             LOSSY(ALL.getName() + " - Lossy", 15),;
 
@@ -357,128 +460,29 @@ public class NyaaUrl {
 
     }
 
-    private final static class NyaaUrlBuilderImpl implements NyaaUrlBuilder {
+    /** Getter */
 
-        private Page page;
-        private Filter filter;
-        private Category category;
-        private int userID, minAge, maxAge, minSize, maxSize;
-        private HashSet<Integer> exclude;
+    public abstract Page getPage();
 
-        public NyaaUrlBuilderImpl() {
-            this.exclude = new HashSet<>();
-            this.reset();
-        }
+    public abstract Filter getFilter();
 
-        @Override
-        public NyaaUrlBuilder page(Page page) {
-            this.page = page;
-            return this;
-        }
+    public abstract NyaaCategory getCategory();
 
-        @Override
-        public NyaaUrlBuilder filter(Filter filter) {
-            this.filter = filter;
-            return this;
-        }
+    public abstract int getUserID();
 
-        @Override
-        public NyaaUrlBuilder cat(Category category) {
-            this.category = category;
-            return this;
-        }
+    public abstract int getMinAge();
 
-        @Override
-        public NyaaUrlBuilder user(int userID) {
-            this.userID = userID;
-            return this;
-        }
+    public abstract int getMaxAge();
 
-        @Override
-        public NyaaUrlBuilder age(int min, int max) {
-            this.minAge = min;
-            this.maxAge = max;
-            return this;
-        }
+    public abstract int getMinSize();
 
-        @Override
-        public NyaaUrlBuilder size(int minSize, int maxSize) {
-            this.minSize = minSize;
-            this.maxSize = maxSize;
-            return this;
-        }
+    public abstract int getMaxSize();
 
-        @Override
-        public NyaaUrlBuilder exclude(int... userID) {
-            for(int id : userID)
-                if(id > 0)
-                    this.exclude.add(id);
-            return this;
-        }
+    public abstract HashSet<Integer> getExclude();
 
-        @Override
-        public NyaaUrlBuilder reset() {
-            page = Page.RSS;
-            filter = Filter.TRUSTED;
-            category = Category.ALL;
-            userID = 0;
-            minAge = 0;
-            maxAge = 0;
-            minSize = 0;
-            maxSize = 0;
-            exclude.clear();
+    public abstract String getSearch();
 
-            return this;
-        }
+    public abstract String getNormalSearch();
 
-        @Override
-        public URL buildURL() {
-            return NyaaUrlBuilder.makeURLfromString(prepareURL());
-        }
-
-        @Override
-        public NyaaUrl build() {
-            //TODO
-            return new NyaaUrl();
-        }
-
-        private String prepareURL() {
-            StringBuilder result = new StringBuilder("https://")
-                    .append((category.isNSFW())? "sukebei" : "www")
-                    .append(".nyaa.se/")
-                    .append(page.toString())
-                    .append(filter.toString())
-                    .append(category.toString());
-            if(userID > 0) result.append("&user=" + userID);
-            if(minSize > 0) result.append("&minage=" + minAge);
-            if(maxAge > 0) result.append("&maxage=" + maxAge);
-            if(minSize > 0) result.append("&minsize=" + minSize);
-            if(maxSize > 0) result.append("&maxsize=" + maxSize);
-            if(exclude.size() > 0) {
-                Iterator<Integer> it = exclude.iterator();
-                result.append("&exclude=").append(it.next().intValue());
-                while( it.hasNext() )
-                    result.append('-').append(it.next().intValue());
-            }
-            reset();
-            return result.toString();
-        }
-
-        /*
-        @Override
-        public NyaaUrl build() {
-            NyaaUrl result = new NyaaUrl();
-            result.page = result;
-            result.filter = filter;
-            result.category = category;
-            result.userID = userID;
-            result.minAge = minAge;
-            result.maxAge = maxAge;
-            result.minSize = minSize;
-            result.maxSize = maxSize;
-            result.exclude.clear();
-            return null;
-        }
-        */
-    }
+    public abstract String getRssFeed();
 }
