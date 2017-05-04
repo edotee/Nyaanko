@@ -9,24 +9,24 @@ nyaa.se is officially dead - for more information look here: https://nyaa.pantsu
 
 > it's 2017/05/03
 
-is bored
+> is bored
 
-decides to write a dedicated nyaa feed aggregator because there aren't enough redundant piece of java software out there
+> decides to write a dedicated nyaa feed aggregator because there aren't enough redundant piece of java software out there
 
-wants to test some of the code
+> wants to test some of the code
 
-codes deliver results janai desu
+> codes deliver results janai desu
 
-later that day: finds out that waifu.nyaa lies in fatal coma
+> later that day: finds out that waifu.nyaa lies in fatal coma
 
-cries
+> cries
 
-waifu wa desu nooto desu
+> waifu wa desu nooto desu
 
-cries more
+> cries more
 
-System.digivolve(me, Digimon.IKARI_SHINJI)
+> System.digivolve(me, Digimon.IKARI_SHINJI)
 
-Google.translate("ore no sei") -> Nyaanko killed waifu-aneki-sama-chan-san
+> Google.translate("ore no sei") -> Nyaanko killed waifu-aneki-sama-chan-san
 
-System.cry().more() -> Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: 9001
+> System.cry().more() -> Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: 9001
