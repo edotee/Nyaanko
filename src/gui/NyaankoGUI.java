@@ -2,14 +2,23 @@ package gui;
 
 import javafx.application.Application;
 import javafx.beans.property.StringProperty;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TitledPane;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.controlsfx.control.SegmentedButton;
+import url.NyaaUrl;
 import url.SimpleNyaaUrl;
 
 import java.net.URL;
-import java.util.HashSet;
 
 /**
  * @author edotee
@@ -25,42 +34,98 @@ public class NyaankoGUI extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        nyaaRSS = SimpleNyaaUrl.builder().cat(SimpleNyaaUrl.Category.ANIME.EN)
-                //.page(ImmutableNyaaUrl.Page.RSS)         // default value
-                //.filter(ImmutableNyaaUrl.Filter.TRUSTED) // default value
-                .age(0, 7)
-                .user(64513)
-                .build()
-                .newInstanceOfRssFeed();
         mainStage = stage;
         mainStage.setTitle("Nyaanko");
         mainStage.setMinWidth(WIDTH);
         mainStage.setMinHeight(HEIGHT);
 
-        TextField textField = new TextField(nyaaRSS.toString());
 
-        BorderPane mainLayout = new BorderPane();
-        mainLayout.setPrefSize(WIDTH, HEIGHT);
-        mainLayout.setCenter(textField);
-        mainLayout.setBottom(numberFieldO("Enter Things Here!"));
+        Scene mainScene = new Scene(  initMainLayout()  );
 
-        Scene mainScene = new Scene(mainLayout);
+
         mainStage.setScene(mainScene);
         mainStage.sizeToScene();
         mainStage.show();
     }
 
-    private void composeNyaaSearchFormular() {
+    private Parent initMainLayout() {
+        BorderPane mainLayout = new BorderPane();
+        mainLayout.setPrefSize(WIDTH, HEIGHT);
+        mainLayout.setTop(wtf());
+        mainLayout.setCenter(categoryPicker());
+        mainLayout.setBottom(filterPicker());
+        return mainLayout;
+    }
 
-        SimpleNyaaUrl.Page page;
-        SimpleNyaaUrl.Filter filter;
-        SimpleNyaaUrl.NyaaCategory category;
-        int userID, minAge, maxAge, minSize, maxSize;
-        HashSet<Integer> exclude;
-        String search;
+    private Node categoryPicker() {
+        VBox result = new VBox();
+        result.setAlignment(Pos.CENTER);
+        for(NyaaUrl.MainCategory mc : NyaaUrl.Category.values())
+            result.getChildren().add( categoryPane(mc) );
+        return result;
+    }
 
-        String normalSearch;
-        String rssFeed;
+    private TitledPane categoryPane(NyaaUrl.MainCategory maincat) {
+
+        SegmentedButton sb_category = new SegmentedButton();
+        sb_category.getStyleClass().add(SegmentedButton.STYLE_CLASS_DARK);
+        for(NyaaUrl.SubCategory sc : maincat.subcatsAsArray())
+            sb_category.getButtons().add( new ToggleButton(sc.getFullName()) );
+
+        TitledPane result = new TitledPane();
+        result.setAlignment(Pos.CENTER);
+        result.setText(maincat.getName());
+        result.setContent(sb_category);
+        result.expandedProperty().setValue(false);
+
+        return result;
+    }
+
+    private Node bottom() {
+        VBox result = new VBox();
+        result.setAlignment(Pos.CENTER);
+        for(NyaaUrl.MainCategory mc : NyaaUrl.Category.values())
+            result.getChildren().addAll( dynamicallyPopulatedCategoryButtons(mc) );
+        return result;
+    }
+
+    private SegmentedButton dynamicallyPopulatedCategoryButtons(NyaaUrl.MainCategory maincat) {
+        SegmentedButton sb_category = new SegmentedButton();
+        sb_category.getStyleClass().add(SegmentedButton.STYLE_CLASS_DARK);
+        for( NyaaUrl.NyaaCategory nc : maincat.subcatsAsArray() )
+            sb_category.getButtons().add(new ToggleButton(nc.getFullName()));
+        return sb_category;
+    }
+
+    private Node filterPicker() {
+        SegmentedButton segmentedButton = new SegmentedButton();
+        segmentedButton.getStyleClass().add(SegmentedButton.STYLE_CLASS_DARK);
+        for(NyaaUrl.Filter f : NyaaUrl.Filter.values()) {
+            ToggleButton tb = new ToggleButton(f.getName());
+            tb.setMaxWidth(Double.MAX_VALUE);
+            HBox.setHgrow(tb, Priority.ALWAYS);
+            segmentedButton.getButtons().add( tb );
+        }
+
+        segmentedButton.setMaxWidth(Double.MAX_VALUE);
+        HBox.setHgrow(segmentedButton, Priority.ALWAYS);
+
+        HBox result = new HBox();
+        result.setAlignment(Pos.CENTER);
+        result.getChildren().add(segmentedButton);
+        return result;
+    }
+
+    private TextField wtf() {
+        nyaaRSS = SimpleNyaaUrl.builder().cat(SimpleNyaaUrl.Category.AnimeSubCategory.EN)
+                //.page(NyaaUrl.Page.RSS)         // default value
+                //.filter(NyaaUrl.Filter.TRUSTED) // default value
+                .age(0, 7)
+                .user(64513)
+                .build()
+                .newInstanceOfRssFeed();
+
+        return new TextField(nyaaRSS.toString());
     }
 
     private TextField numberFieldO(String promptText) {

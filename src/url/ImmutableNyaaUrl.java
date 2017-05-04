@@ -18,6 +18,10 @@ public class ImmutableNyaaUrl implements NyaaUrl<ImmutableNyaaUrl> {
     private final String rssFeed;
 
     private ImmutableNyaaUrl(UrlBuilderImpl builder) {
+        this(builder, true);
+    }
+
+    private ImmutableNyaaUrl(UrlBuilderImpl builder, boolean reset) {
         page = builder.page;
         filter = builder.filter;
         category = builder.category;
@@ -35,7 +39,7 @@ public class ImmutableNyaaUrl implements NyaaUrl<ImmutableNyaaUrl> {
         builder.page = Page.RSS;
         rssFeed = prepareURL();
 
-        builder.reset();
+        if(reset) builder.reset();
     }
 
     /** Builder Singleton */
@@ -44,11 +48,11 @@ public class ImmutableNyaaUrl implements NyaaUrl<ImmutableNyaaUrl> {
 
         private final static NyaaUrlBuilder<ImmutableNyaaUrl> INSTANCE = new UrlBuilderImpl();
         private static NyaaUrl<?> DEFAULTS = INSTANCE.page(Page.RSS)
-                .cat(Category.ALL).filter(Filter.ALL)
+                .cat(Category.ANIME).filter(Filter.ALL)
                 .user(0)
                 .age(0, 0).size(0, 0)
                 .search("")
-                .build();
+                .build(false);
 
         private Page page;
         private Filter filter;
@@ -59,7 +63,6 @@ public class ImmutableNyaaUrl implements NyaaUrl<ImmutableNyaaUrl> {
 
         public UrlBuilderImpl() {
             exclude = new HashSet<>();
-            reset();
         }
 
         @Override
@@ -136,8 +139,8 @@ public class ImmutableNyaaUrl implements NyaaUrl<ImmutableNyaaUrl> {
         }
 
         @Override
-        public ImmutableNyaaUrl build() {
-            return new ImmutableNyaaUrl(this);
+        public ImmutableNyaaUrl build(boolean reset) {
+            return new ImmutableNyaaUrl(this, reset);
         }
     }
 

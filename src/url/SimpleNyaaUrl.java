@@ -18,6 +18,10 @@ public class SimpleNyaaUrl implements NyaaUrl<SimpleNyaaUrl> {
     private String rssFeed;
 
     private SimpleNyaaUrl(UrlBuilderImpl builder) {
+        this(builder, true);
+    }
+
+    private SimpleNyaaUrl(UrlBuilderImpl builder, boolean reset) {
         page = builder.page;
         filter = builder.filter;
         category = builder.category;
@@ -35,7 +39,7 @@ public class SimpleNyaaUrl implements NyaaUrl<SimpleNyaaUrl> {
         builder.page = Page.RSS;
         rssFeed = prepareURL();
 
-        builder.reset();
+        if(reset) builder.reset();
     }
 
     /** Builder Singleton */
@@ -44,11 +48,11 @@ public class SimpleNyaaUrl implements NyaaUrl<SimpleNyaaUrl> {
 
         private final static NyaaUrlBuilder<SimpleNyaaUrl> INSTANCE = new UrlBuilderImpl();
         private static NyaaUrl<?> DEFAULTS = INSTANCE.page(Page.RSS)
-                .cat(Category.ALL).filter(Filter.ALL)
+                .cat(Category.ANIME).filter(Filter.ALL)
                 .user(0)
                 .age(0, 0).size(0, 0)
                 .search("")
-                .build();
+                .build(false);
 
         private Page page;
         private Filter filter;
@@ -59,7 +63,6 @@ public class SimpleNyaaUrl implements NyaaUrl<SimpleNyaaUrl> {
 
         public UrlBuilderImpl() {
             exclude = new HashSet<>();
-            reset();
         }
 
         @Override
@@ -136,8 +139,8 @@ public class SimpleNyaaUrl implements NyaaUrl<SimpleNyaaUrl> {
         }
 
         @Override
-        public SimpleNyaaUrl build() {
-            return new SimpleNyaaUrl(this);
+        public SimpleNyaaUrl build(boolean reset) {
+            return new SimpleNyaaUrl(this, reset);
         }
     }
 
